@@ -25,7 +25,6 @@ export class TodoController {
   async create(@Body() todo: Todo): Promise<Todo> {
     const newTodo = await this.todoService.create(todo);
     this.appGateway.server.to(String(todo.month)).emit('todoAdded', newTodo);
-    this.appGateway.server.to(`todo-${todo.id}`).emit('todoAdded', newTodo);
     return newTodo;
   }
 

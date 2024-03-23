@@ -9,7 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway()
+@WebSocketGateway(3001, { cors: 'localhost:4200' })
 export class TodoSocket
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -27,15 +27,23 @@ export class TodoSocket
     console.log(`Client disconnected: ${client.id}`);
   }
 
-  @SubscribeMessage('joinRoom')
-  handleJoinRoom(client: Socket, room: string) {
-    client.join(room);
-    console.log(`Client joined room: ${room}`);
+  @SubscribeMessage('join:todo-list')
+  joinTodoListRoom(client: Socket, month: string) {
+    client.join(month);
   }
 
-  @SubscribeMessage('leaveRoom')
-  handleLeaveRoom(client: Socket, room: string) {
-    client.leave(room);
-    console.log(`Client left room: ${room}`);
+  @SubscribeMessage('leave:todo-list')
+  leaveTodoListRoom(client: Socket, month: string) {
+    client.leave(month);
+  }
+
+  @SubscribeMessage('join:todo')
+  joinTodoRoom(client: Socket, todoId: string) {
+    client.join(`todo-${todoId}`);
+  }
+
+  @SubscribeMessage('leave:todo')
+  leaveTodoRoom(client: Socket, todoId: string) {
+    client.leave(`todo-${todoId}`);
   }
 }

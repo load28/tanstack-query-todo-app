@@ -4,26 +4,26 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SocketService {
-  private readonly socket = io('http://localhost:3000');
+  readonly socket = io('http://localhost:3001', {
+    transports: ['websocket'],
+  });
 
-  constructor() {
-    this.socket.connect();
-  }
+  constructor() {}
 
   joinTodoListRoom(month: number): void {
-    this.socket.emit('joinRoom', month);
+    this.socket.emit('join:todo-list', month);
   }
 
   leaveTodoListRoom(month: number): void {
-    this.socket.emit('leaveRoom', month);
+    this.socket.emit('leave:todo-list', month);
   }
 
   joinTodoRoom(id: number): void {
-    this.socket.emit('joinRoom', `todo-${id}`);
+    this.socket.emit('join:todo', id);
   }
 
   leaveTodoRoom(id: number): void {
-    this.socket.emit('leaveRoom', `todo-${id}`);
+    this.socket.emit('leave:todo', id);
   }
 
   onTodoAdded(): Observable<any> {

@@ -20,7 +20,7 @@ import { NgForOf } from '@angular/common';
           >
         </mat-nav-list>
       </mat-sidenav>
-      <mat-sidenav-content>
+      <mat-sidenav-content class="content">
         <router-outlet></router-outlet>
       </mat-sidenav-content>
     </mat-sidenav-container>
@@ -37,6 +37,10 @@ import { NgForOf } from '@angular/common';
 
       .nav-list-title {
         margin-left: 10px;
+      }
+
+      .content {
+        padding: 20px;
       }
     `,
   ],
