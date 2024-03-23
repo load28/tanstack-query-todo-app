@@ -11,7 +11,7 @@ export class TodoService {
     private todoRepository: Repository<Todo>,
   ) {}
 
-  async findAll(month: number): Promise<Todo[]> {
+  async findAll(month: string): Promise<Todo[]> {
     return this.todoRepository.find({ where: { month } });
   }
 
@@ -19,7 +19,7 @@ export class TodoService {
     return this.todoRepository.findOne({ where: { id } });
   }
 
-  async create(todo: Todo): Promise<Todo> {
+  async create(todo: Omit<Todo, 'id'>): Promise<Todo> {
     return this.todoRepository.save(todo);
   }
 

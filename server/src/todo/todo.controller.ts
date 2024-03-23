@@ -12,7 +12,7 @@ export class TodoController {
   ) {}
 
   @Get('list/:month')
-  async findAll(@Param('month') month: number): Promise<Todo[]> {
+  async findAll(@Param('month') month: string): Promise<Todo[]> {
     return this.todoService.findAll(month);
   }
 
@@ -22,18 +22,16 @@ export class TodoController {
   }
 
   @Post('create')
-  async create(@Body() todo: Todo): Promise<Todo> {
+  async create(@Body() todo: Omit<Todo, 'id'>): Promise<Todo> {
     const newTodo = await this.todoService.create(todo);
-    this.appGateway.server.to(String(todo.month)).emit('todoAdded', newTodo);
+    this.appGateway.server.to(todo.month).emit('todoAdded', newTodo);
     return newTodo;
   }
 
   @Post('update')
   async update(@Body() todo: Todo): Promise<Todo> {
     const updatedTodo = await this.todoService.update(todo);
-    this.appGateway.server
-      .to(String(todo.month))
-      .emit('todoUpdated', updatedTodo);
+    this.appGateway.server.to(todo.month).emit('todoUpdated', updatedTodo);
     this.appGateway.server
       .to(`todo-${todo.id}`)
       .emit('todoUpdated', updatedTodo);

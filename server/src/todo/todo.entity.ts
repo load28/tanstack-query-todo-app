@@ -1,9 +1,9 @@
 // src/todo/todo.entity.ts
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Todo {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -16,5 +16,5 @@ export class Todo {
   date: string;
 
   @Column()
-  month: number;
+  month: string;
 }

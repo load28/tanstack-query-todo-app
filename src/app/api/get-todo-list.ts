@@ -8,14 +8,14 @@ export interface Todo {
   title: string;
   content: string;
   date: string;
-  month: number;
+  month: string;
 }
 
 export function GetTodoListApi(injector = inject(Injector)) {
   return runInInjectionContext(injector, () => {
     const httpClient = inject(HttpClient);
 
-    return (month: number): Observable<Todo[]> => {
+    return (month: string): Observable<Todo[]> => {
       return httpClient.get<Todo[]>(`${env.apiUrl}/todo/list/${month}`);
     };
   });

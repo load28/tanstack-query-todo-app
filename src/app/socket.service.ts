@@ -1,28 +1,30 @@
 import { Injectable } from '@angular/core';
 import { io } from 'socket.io-client';
 import { Observable } from 'rxjs';
+import { injectQueryClient } from '@tanstack/angular-query-experimental';
 
 @Injectable({ providedIn: 'root' })
 export class SocketService {
-  readonly socket = io('http://localhost:3001', {
+  private readonly queryClient = injectQueryClient();
+  private readonly socket = io('http://localhost:3001', {
     transports: ['websocket'],
   });
 
   constructor() {}
 
-  joinTodoListRoom(month: number): void {
+  joinTodoListRoom(month: string): void {
     this.socket.emit('join:todo-list', month);
   }
 
-  leaveTodoListRoom(month: number): void {
+  leaveTodoListRoom(month: string): void {
     this.socket.emit('leave:todo-list', month);
   }
 
-  joinTodoRoom(id: number): void {
+  joinTodoRoom(id: string): void {
     this.socket.emit('join:todo', id);
   }
 
-  leaveTodoRoom(id: number): void {
+  leaveTodoRoom(id: string): void {
     this.socket.emit('leave:todo', id);
   }
 
