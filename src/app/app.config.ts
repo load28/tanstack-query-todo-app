@@ -16,6 +16,7 @@ import {
 import { provideHttpClient } from '@angular/common/http';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { SocketService } from './socket.service';
+import { Todo } from './api/get-todo-list';
 
 const provideQuery = (qc: QueryClient) => {
   return makeEnvironmentProviders([
@@ -37,6 +38,15 @@ const provideQuery = (qc: QueryClient) => {
                 socketService.joinTodoListRoom(
                   cache.query.meta['month'] as string,
                 );
+                socketService.onTodoAdded().subscribe((data) => {
+                  qc.setQueryData(
+                    ['todoList', cache.query.meta!['month']],
+                    (old: Todo[]) => {
+                      console.log('todoList added', data);
+                      return [data, ...old];
+                    },
+                  );
+                });
               } else if (
                 cache.query.queryKey[0] === 'todo' &&
                 cache.query.meta?.['id']
