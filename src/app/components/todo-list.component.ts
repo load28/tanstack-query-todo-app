@@ -1,4 +1,4 @@
-import { Component, effect, inject, Signal } from '@angular/core';
+import { Component, computed, effect, inject, Signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { lastValueFrom, map } from 'rxjs';
@@ -44,12 +44,20 @@ import { CreateTodoApi } from '../api/create-todo-list';
 
         <mat-form-field class="todo-input">
           <mat-label>Due Date</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="date" />
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="date"
+            [matDatepickerFilter]="dateFilter()"
+          />
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"
           ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker
+            #picker
+            [startAt]="calendarStartAt()"
+          ></mat-datepicker>
         </mat-form-field>
 
         <button mat-raised-button color="primary" type="submit">Add</button>
@@ -57,7 +65,6 @@ import { CreateTodoApi } from '../api/create-todo-list';
     </mat-expansion-panel>
 
     @if (todoList.isLoading()) {
-      <!--      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>-->
     } @else if (todoList.isError()) {
       <p>Error loading todos.</p>
     } @else if (todoList.isSuccess()) {
@@ -119,6 +126,20 @@ export class TodoListComponent {
     title: new FormControl(''),
     details: new FormControl(''),
     date: new FormControl(''),
+  });
+
+  dateFilter = computed(() => {
+    return (date: Date | null): boolean => {
+      if (!this.months()) {
+        return false;
+      }
+
+      return date ? date.getMonth().toString() === this.months()! : false;
+    };
+  });
+
+  calendarStartAt = computed(() => {
+    return new Date(new Date().getFullYear(), parseInt(this.months()!));
   });
 
   constructor() {

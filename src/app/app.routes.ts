@@ -8,7 +8,7 @@ import { TodoListComponent } from './components/todo-list.component';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/todos/list',
+    redirectTo: '/todos/list?m=0',
     pathMatch: 'full',
   },
   {

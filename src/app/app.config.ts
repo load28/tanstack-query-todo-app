@@ -27,6 +27,7 @@ const provideQuery = (qc: QueryClient) => {
       useValue: () => {
         qc.mount();
 
+        // todo 아래 동작들을 추상화 하여 각 소켓 별로 기능을 별도로 만들기
         const socketService = inject(SocketService);
         qc.getQueryCache().subscribe((cache) => {
           switch (cache.type) {
@@ -38,12 +39,21 @@ const provideQuery = (qc: QueryClient) => {
                 socketService.joinTodoListRoom(
                   cache.query.meta['month'] as string,
                 );
-                socketService.onTodoAdded().subscribe((data) => {
+                socketService.onTodoAdded().subscribe((data: Todo) => {
                   qc.setQueryData(
                     ['todoList', cache.query.meta!['month']],
-                    (old: Todo[]) => {
-                      console.log('todoList added', data);
-                      return [data, ...old];
+                    (old: Todo[] | undefined) => {
+                      const safeOld = old ?? [];
+                      return [data, ...safeOld];
+                    },
+                  );
+                });
+                socketService.onTodoRemoved().subscribe((id: string) => {
+                  qc.setQueryData(
+                    ['todoList', cache.query.meta!['month']],
+                    (old: Todo[] | undefined) => {
+                      const safeOld = old ?? [];
+                      return safeOld.filter((todo) => todo.id !== id);
                     },
                   );
                 });

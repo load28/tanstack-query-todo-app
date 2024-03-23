@@ -3,6 +3,9 @@ import { Todo } from '../api/get-todo-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { DatePipe } from '@angular/common';
+import { TimezoneDatePipe } from '../utils/timezone-date.pipe';
+import { DeleteTodoApi } from '../api/delete-todo';
 
 @Component({
   standalone: true,
@@ -14,9 +17,13 @@ import { MatIcon } from '@angular/material/icon';
           >{{ todo().title }}
         </mat-card-title>
         <mat-card-subtitle class="mat-card-subtitle"
-          >{{ todo().date }}
+          >{{ todo().date | timezoneDate: 'shortDate' : timezone }}
         </mat-card-subtitle>
-        <button mat-icon-button>
+        <button
+          class="mat-delete-button"
+          mat-icon-button
+          (click)="onDelete(todo().id)"
+        >
           <mat-icon>delete</mat-icon>
         </button>
       </mat-card-header>
@@ -48,13 +55,23 @@ import { MatIcon } from '@angular/material/icon';
       font-size: 14px;
       color: #666666;
     }
+
+    .mat-delete-button {
+      color: #e33030;
+    }
   `,
-  imports: [MatCardModule, MatIconButton, MatIcon],
+  imports: [MatCardModule, MatIconButton, MatIcon, DatePipe, TimezoneDatePipe],
 })
 export class TodoItemComponent implements OnInit {
+  private readonly deleteTodoApi = DeleteTodoApi();
   todo = input.required<Todo>();
+  timezone = 'Asia/Seoul';
 
   constructor() {}
 
   ngOnInit() {}
+
+  onDelete(id: string) {
+    this.deleteTodoApi(id).subscribe();
+  }
 }

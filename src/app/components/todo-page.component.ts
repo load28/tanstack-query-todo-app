@@ -1,8 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit, Signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListItem, MatNavList } from '@angular/material/list';
-import { NgForOf } from '@angular/common';
+import { NgClass, NgForOf } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -14,6 +16,7 @@ import { NgForOf } from '@angular/common';
           <h3 class="nav-list-title">Months</h3>
           <a
             mat-list-item
+            [ngClass]="{ selected: month.value === selectedMonth() }"
             *ngFor="let month of months"
             (click)="onClick(month.value)"
             >{{ month.name }}</a
@@ -42,26 +45,45 @@ import { NgForOf } from '@angular/common';
       .content {
         padding: 20px;
       }
+
+      .selected {
+        background-color: #ddd;
+      }
     `,
   ],
-  imports: [RouterOutlet, MatNavList, MatListItem, NgForOf, MatSidenavModule],
+  imports: [
+    RouterOutlet,
+    MatNavList,
+    MatListItem,
+    NgForOf,
+    MatSidenavModule,
+    NgClass,
+  ],
 })
 export class TodoPageComponent implements OnInit {
+  private readonly activatedRoute = inject(ActivatedRoute);
   private readonly router = inject(Router);
+
   months: { name: string; value: string }[] = [
-    { name: 'January', value: '1' },
-    { name: 'February', value: '2' },
-    { name: 'March', value: '3' },
-    { name: 'April', value: '4' },
-    { name: 'May', value: '5' },
-    { name: 'June', value: '6' },
-    { name: 'July', value: '7' },
-    { name: 'August', value: '8' },
-    { name: 'September', value: '9' },
-    { name: 'October', value: '10' },
-    { name: 'November', value: '11' },
-    { name: 'December', value: '12' },
+    { name: 'January', value: '0' },
+    { name: 'February', value: '1' },
+    { name: 'March', value: '2' },
+    { name: 'April', value: '3' },
+    { name: 'May', value: '4' },
+    { name: 'June', value: '5' },
+    { name: 'July', value: '6' },
+    { name: 'August', value: '7' },
+    { name: 'September', value: '8' },
+    { name: 'October', value: '9' },
+    { name: 'November', value: '10' },
+    { name: 'December', value: '11' },
   ];
+
+  selectedMonth: Signal<string | undefined> = toSignal(
+    this.activatedRoute.queryParams.pipe(
+      map((params) => params['m'] as string),
+    ),
+  );
 
   constructor() {}
 

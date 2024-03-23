@@ -38,8 +38,8 @@ export class TodoController {
     return updatedTodo;
   }
 
-  @Post('delete/:id')
-  async remove(@Param('id') id: string): Promise<void> {
+  @Post('delete')
+  async remove(@Body() { id }: { id: string }): Promise<void> {
     const todo = await this.todoService.find(id);
     await this.todoService.remove(id);
     this.appGateway.server.to(String(todo.month)).emit('todoRemoved', id);
