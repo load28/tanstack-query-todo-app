@@ -4,12 +4,14 @@ import { SocketService } from '../../socket.service';
 import { filter, Subscription } from 'rxjs';
 import { QueryCacheNotifyEvent } from '@tanstack/angular-query-experimental';
 import { TodoListQueryCacheDispatcher } from './todo-list-cache-dispatcher';
-import { SocketDispatcher } from '../query-socket-dispatcher-runner';
+
+import { TQueryCacheSocketDispatcher } from '../index';
 
 @Injectable()
 export class TodoListSocketDispatcher
   extends TodoListQueryCacheDispatcher
-  implements SocketDispatcher<string[], Todo, Todo[], { month: string }>
+  implements
+    TQueryCacheSocketDispatcher<string[], Todo, Todo[], { month: string }>
 {
   private readonly socketService = inject(SocketService);
 

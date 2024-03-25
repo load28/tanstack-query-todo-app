@@ -1,31 +1,15 @@
-import {
-  injectQueryClient,
-  QueryCacheNotifyEvent,
-} from '@tanstack/angular-query-experimental';
-import { TQueryCacheDispatcher } from './todo-list/todo-list-cache-dispatcher';
+import { injectQueryClient } from '@tanstack/angular-query-experimental';
 import { inject, Injectable, Injector } from '@angular/core';
-
-export interface SocketDispatcher<
-  K = unknown,
-  T = unknown,
-  S = unknown,
-  M = unknown,
-> extends TQueryCacheDispatcher<K, T, S> {
-  join(key: K, qe: QueryCacheNotifyEvent): void;
-  leave(key: K, qe: QueryCacheNotifyEvent): void;
-  keyGuard(key: K, meta: M): boolean;
-}
-
-export type TSocketDispatcherClass = new () => SocketDispatcher;
+import { TSocketDispatcherClass } from './index';
 
 @Injectable({ providedIn: 'root' })
 export class QueryCacheSocketDispatcherRunner<K> {
   private readonly queryClient = injectQueryClient();
   private readonly injector = inject(Injector);
 
-  run(ds: TSocketDispatcherClass[]): void {
-    this.queryClient.getQueryCache().subscribe((qe) => {
-      ds.forEach((dispatcherClass) => {
+  run(ds: TSocketDispatcherClass[]): () => void {
+    return this.queryClient.getQueryCache().subscribe((qe) => {
+      ds.forEach((dispatcherClass: TSocketDispatcherClass) => {
         const dispatcher = this.injector.get(dispatcherClass);
 
         if (!dispatcher.keyGuard(qe.query.queryKey as K, qe.query.meta)) {

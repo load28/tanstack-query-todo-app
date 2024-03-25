@@ -1,12 +1,9 @@
 import { Todo } from '../../api/get-todo-list';
 import { injectQueryClient } from '@tanstack/angular-query-experimental';
+import { TQueryCacheDispatcher } from '../index';
+import { Injectable } from '@angular/core';
 
-export interface TQueryCacheDispatcher<K, T, S> {
-  add(key: K, data: T): S | undefined;
-  update(key: K, data: T): S | undefined;
-  remove(key: K, id: string): S | undefined;
-}
-
+@Injectable()
 export class TodoListQueryCacheDispatcher
   implements TQueryCacheDispatcher<string[], Todo, Todo[]>
 {

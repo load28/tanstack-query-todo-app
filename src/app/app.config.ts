@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  DestroyRef,
   ENVIRONMENT_INITIALIZER,
   inject,
   makeEnvironmentProviders,
@@ -15,10 +16,8 @@ import {
 import { provideHttpClient } from '@angular/common/http';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { TodoListSocketDispatcher } from './query/todo-list/todo-list-cache-socket-dispatcher';
-import {
-  QueryCacheSocketDispatcherRunner,
-  TSocketDispatcherClass,
-} from './query/query-socket-dispatcher-runner';
+import { QueryCacheSocketDispatcherRunner } from './query/query-socket-dispatcher-runner';
+import { TSocketDispatcherClass } from './query';
 
 const provideQuery = (qc: QueryClient, sd: TSocketDispatcherClass[]) => {
   return makeEnvironmentProviders([
@@ -32,7 +31,11 @@ const provideQuery = (qc: QueryClient, sd: TSocketDispatcherClass[]) => {
         const queryCacheSocketDispatcherRunner = inject(
           QueryCacheSocketDispatcherRunner,
         );
-        queryCacheSocketDispatcherRunner.run(sd);
+        const sub = queryCacheSocketDispatcherRunner.run(sd);
+
+        inject(DestroyRef).onDestroy(() => {
+          sub();
+        });
       },
     },
   ]);

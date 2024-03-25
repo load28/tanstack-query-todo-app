@@ -8,8 +8,6 @@ export class SocketService {
     transports: ['websocket'],
   });
 
-  constructor() {}
-
   joinTodoListRoom(month: string): void {
     this.socket.emit('join:todo-list', month);
   }
