@@ -42,7 +42,11 @@ export class TodoController {
   async remove(@Body() { id }: { id: string }): Promise<void> {
     const todo = await this.todoService.find(id);
     await this.todoService.remove(id);
-    this.appGateway.server.to(String(todo.month)).emit('todoRemoved', id);
-    this.appGateway.server.to(`todo-${id}`).emit('todoRemoved', id);
+    this.appGateway.server
+      .to(String(todo.month))
+      .emit('todoRemoved', { month: todo.month, id });
+    this.appGateway.server
+      .to(`todo-${id}`)
+      .emit('todoRemoved', { month: todo.month, id });
   }
 }

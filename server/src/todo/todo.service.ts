@@ -1,8 +1,8 @@
 // src/todo/todo.service.ts
-import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Todo } from './todo.entity';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class TodoService {

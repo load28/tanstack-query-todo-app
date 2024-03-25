@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { io } from 'socket.io-client';
 import { Observable } from 'rxjs';
-import { injectQueryClient } from '@tanstack/angular-query-experimental';
 
 @Injectable({ providedIn: 'root' })
 export class SocketService {
-  private readonly queryClient = injectQueryClient();
   private readonly socket = io('http://localhost:3001', {
     transports: ['websocket'],
   });
