@@ -14,22 +14,17 @@ import {
 } from '@tanstack/angular-query-experimental';
 import { provideHttpClient } from '@angular/common/http';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { TodoListSocketDispatcher } from './query/todo-list/todo-list-cache-socket-dispatcher';
 import {
   QueryCacheSocketDispatcherRunner,
-  TodoListQueryCacheDispatcher,
-  TodoListSocketDispatcher,
-  TQueryCacheSocketDispatcherClass,
-} from './query-provider.service';
+  TSocketDispatcherClass,
+} from './query/query-socket-dispatcher-runner';
 
-const provideQuery = (
-  qc: QueryClient,
-  sd: TQueryCacheSocketDispatcherClass[],
-) => {
+const provideQuery = (qc: QueryClient, sd: TSocketDispatcherClass[]) => {
   return makeEnvironmentProviders([
     provideAngularQuery(qc),
     QueryCacheSocketDispatcherRunner,
-    TodoListSocketDispatcher,
-    TodoListQueryCacheDispatcher,
+    ...sd,
     {
       provide: ENVIRONMENT_INITIALIZER,
       multi: true,

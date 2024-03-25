@@ -1,0 +1,38 @@
+import { Todo } from '../../api/get-todo-list';
+import { injectQueryClient } from '@tanstack/angular-query-experimental';
+
+export interface TQueryCacheDispatcher<K, T, S> {
+  add(key: K, data: T): S | undefined;
+  update(key: K, data: T): S | undefined;
+  remove(key: K, id: string): S | undefined;
+}
+
+export class TodoListQueryCacheDispatcher
+  implements TQueryCacheDispatcher<string[], Todo, Todo[]>
+{
+  private readonly queryClient = injectQueryClient();
+
+  add(key: string[], data: Todo): Todo[] | undefined {
+    return this.queryClient.setQueryData(key, (state: Todo[] | undefined) => {
+      return [data, ...getSafeTodoList(state)];
+    }) as Todo[];
+  }
+
+  remove(key: string[], id: string): Todo[] | undefined {
+    return this.queryClient.setQueryData(key, (state: Todo[] | undefined) => {
+      return getSafeTodoList(state).filter((todo) => todo.id !== id);
+    });
+  }
+
+  update(key: string[], data: Todo): Todo[] | undefined {
+    return this.queryClient.setQueryData(key, (state: Todo[] | undefined) => {
+      return getSafeTodoList(state).map((todo) =>
+        todo.id === data.id ? data : todo,
+      );
+    });
+  }
+}
+
+function getSafeTodoList(todoList: Todo[] | undefined): Todo[] {
+  return todoList ?? [];
+}

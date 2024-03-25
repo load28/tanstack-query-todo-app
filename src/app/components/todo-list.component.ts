@@ -119,6 +119,9 @@ export class TodoListComponent {
     queryKey: ['todoList', this.months()],
     queryFn: () => lastValueFrom(this.getTodoListApi(this.months()!)),
     enabled: !!this.months(),
+    meta: {
+      month: this.months(),
+    },
   }));
 
   todoForm = new FormGroup({
