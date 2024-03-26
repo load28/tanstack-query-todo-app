@@ -6,7 +6,6 @@ import { TQueryEvenDispatcher, TQueryEventDispatcherClass } from '../index';
 export class QueryEventListenerExecutor {
   private readonly queryClient = injectQueryClient();
   private readonly injector = inject(Injector);
-  private readonly serviceInstances = new Map<string, TQueryEvenDispatcher>();
 
   run(ql: Record<string, TQueryEventDispatcherClass>): () => void {
     return this.queryClient.getQueryCache().subscribe((qe) => {
@@ -17,34 +16,13 @@ export class QueryEventListenerExecutor {
         return;
       }
 
-      const serviceInstances = this.createOrGetServiceInstance(
-        JSON.stringify(qe.query.queryKey),
-        dispatcherClass,
-      );
+      const serviceInstances = this.injector.get(dispatcherClass);
 
       if (!serviceInstances.isEqual(qe)) {
         return;
       }
 
       serviceInstances.dispatch(qe);
-
-      if (qe.type === 'removed') {
-        this.serviceInstances.delete(JSON.stringify(qe.query.queryKey));
-      }
     });
-  }
-
-  createOrGetServiceInstance(
-    key: string,
-    classType: TQueryEventDispatcherClass,
-  ): TQueryEvenDispatcher {
-    if (this.serviceInstances.has(key)) {
-      return this.serviceInstances.get(key)!;
-    }
-
-    const instance = this.injector.get(classType);
-    this.serviceInstances.set(key, instance);
-
-    return instance;
   }
 }
