@@ -10,10 +10,10 @@ export class QueryEventListenerExecutor {
 
   run(ql: Record<string, TQueryEventDispatcherClass>): () => void {
     return this.queryClient.getQueryCache().subscribe((qe) => {
-      const dataType = qe.query.queryKey[0];
-      const dispatcherClass = ql[dataType];
+      const domainKey = qe.query.queryKey[0];
+      const dispatcherClass = ql[domainKey];
       if (!dispatcherClass) {
-        console.warn('No query event dispatcher for', dataType);
+        console.warn('No query event dispatcher for', domainKey);
         return;
       }
 
