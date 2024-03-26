@@ -3,35 +3,46 @@ import { Todo } from '../../api/get-todo-list';
 import { SocketService } from '../../socket.service';
 import { filter, Subscription } from 'rxjs';
 import { QueryCacheNotifyEvent } from '@tanstack/angular-query-experimental';
-import { TodoListQueryCacheDispatcher } from './todo-list-cache-dispatcher';
-
-import { TQueryCacheSocketDispatcher } from '../index';
+import { TQueryEvenDispatcher } from '../index';
+import { TodoListCacheDispatcher } from './todo-list-cache-dispatcher';
 
 @Injectable()
 export class TodoListSocketDispatcher
-  extends TodoListQueryCacheDispatcher
-  implements
-    TQueryCacheSocketDispatcher<string[], Todo, Todo[], { month: string }>
+  extends TodoListCacheDispatcher
+  implements TQueryEvenDispatcher
 {
   private readonly socketService = inject(SocketService);
 
   subs: Subscription[] | undefined;
 
-  keyGuard(key: string[], { month }: { month: string }): boolean {
-    return key[0] === 'todoList' && key[1] === month;
+  isEqual(qn: QueryCacheNotifyEvent): boolean {
+    const [_, queryMonth] = qn.query.queryKey;
+    const targetMonth = qn.query.meta?.['month'];
+    return queryMonth === targetMonth;
   }
 
-  join(key: string[], qe: QueryCacheNotifyEvent): void {
-    const currentMonth = key[1];
-    this.socketService.joinTodoListRoom(currentMonth);
-    this.subs = this.subscribeSocketEvents(key, qe);
+  dispatch(qn: QueryCacheNotifyEvent) {
+    const type = qn.type;
+    const key = qn.query.queryKey;
+    switch (type) {
+      case 'added': {
+        const [_, queryMonth] = qn.query.queryKey;
+        this.socketService.joinTodoListRoom(queryMonth);
+        this.subs = this.subscribeSocketEvents(key, qn);
+        break;
+      }
+      case 'removed': {
+        this.socketService.leaveTodoListRoom(key[1]);
+        this.unsubscribeSocketEvents();
+      }
+    }
   }
 
-  subscribeSocketEvents(
+  private subscribeSocketEvents(
     key: string[],
-    qe: QueryCacheNotifyEvent,
+    qn: QueryCacheNotifyEvent,
   ): Subscription[] {
-    const { month: metaMonth } = qe.query.meta as { month: string };
+    const { month: metaMonth } = qn.query.meta as { month: string };
 
     const addSub = this.socketService
       .onTodoAdded()
@@ -67,12 +78,7 @@ export class TodoListSocketDispatcher
     return [addSub, removeSub, updateSub];
   }
 
-  leave(key: string[]): void {
-    this.socketService.leaveTodoListRoom(key[1]);
-    this.unsubscribeSocketEvents();
-  }
-
-  unsubscribeSocketEvents(): void {
+  private unsubscribeSocketEvents(): void {
     this.subs?.forEach((sub) => {
       sub.unsubscribe();
     });

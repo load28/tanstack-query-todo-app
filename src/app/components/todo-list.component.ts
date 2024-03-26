@@ -21,6 +21,7 @@ import {
 } from '@angular/material/datepicker';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CreateTodoApi } from '../api/create-todo-list';
+import { QueryKeys } from '../app.config';
 
 @Component({
   standalone: true,
@@ -116,7 +117,7 @@ export class TodoListComponent {
   );
 
   todoList: CreateQueryResult<Todo[]> = injectQuery(() => ({
-    queryKey: ['todoList', this.months()],
+    queryKey: [QueryKeys.todoList, this.months()],
     queryFn: () => lastValueFrom(this.getTodoListApi(this.months()!)),
     enabled: !!this.months(),
     meta: {

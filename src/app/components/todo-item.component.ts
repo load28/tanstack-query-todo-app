@@ -1,4 +1,4 @@
-import { Component, input, OnInit } from '@angular/core';
+import { Component, Input, input, OnInit } from '@angular/core';
 import { Todo } from '../api/get-todo-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconButton } from '@angular/material/button';

@@ -6,7 +6,6 @@ import {
   makeEnvironmentProviders,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
@@ -15,23 +14,23 @@ import {
 } from '@tanstack/angular-query-experimental';
 import { provideHttpClient } from '@angular/common/http';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { TodoListSocketDispatcher } from './query/todo-list/todo-list-cache-socket-dispatcher';
-import { QueryCacheSocketDispatcherRunner } from './query/query-socket-dispatcher-runner';
-import { TSocketDispatcherClass } from './query';
+import { TodoListSocketDispatcher } from './query/todo-list/todo-list-socket-dispatcher';
+import { TQueryEventDispatcherClass } from './query';
+import { QueryEventListenerExecutor } from './query/runner/query-event-listener-executor';
 
-const provideQuery = (qc: QueryClient, sd: TSocketDispatcherClass[]) => {
+const provideQuery = (
+  qc: QueryClient,
+  sd: Record<string, TQueryEventDispatcherClass>,
+) => {
   return makeEnvironmentProviders([
     provideAngularQuery(qc),
-    QueryCacheSocketDispatcherRunner,
-    ...sd,
+    ...Object.values(sd),
     {
       provide: ENVIRONMENT_INITIALIZER,
       multi: true,
       useValue: () => {
-        const queryCacheSocketDispatcherRunner = inject(
-          QueryCacheSocketDispatcherRunner,
-        );
-        const sub = queryCacheSocketDispatcherRunner.run(sd);
+        const queryEventListenerExecutor = inject(QueryEventListenerExecutor);
+        const sub = queryEventListenerExecutor.run(sd);
 
         inject(DestroyRef).onDestroy(() => {
           sub();
@@ -44,11 +43,15 @@ const provideQuery = (qc: QueryClient, sd: TSocketDispatcherClass[]) => {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      gcTime: 5000,
+      gcTime: 1000 * 3,
       staleTime: Infinity,
     },
   },
 });
+
+export const QueryKeys = {
+  todoList: 'todoList',
+} as const;
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -56,6 +59,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideAnimationsAsync(),
     provideNativeDateAdapter(),
-    provideQuery(queryClient, [TodoListSocketDispatcher]),
+    provideQuery(queryClient, {
+      [QueryKeys.todoList]: TodoListSocketDispatcher,
+    }),
   ],
 };
