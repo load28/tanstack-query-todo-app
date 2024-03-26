@@ -1,4 +1,4 @@
-import { Component, Input, input, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { Todo } from '../api/get-todo-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconButton } from '@angular/material/button';
@@ -57,7 +57,7 @@ import { DeleteTodoApi } from '../api/delete-todo';
     }
 
     .mat-delete-button {
-      color: #e33030;
+      color: #ab9e9e;
     }
   `,
   imports: [MatCardModule, MatIconButton, MatIcon, DatePipe, TimezoneDatePipe],

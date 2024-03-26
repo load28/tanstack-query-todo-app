@@ -16,7 +16,13 @@ export function GetTodoListApi(injector = inject(Injector)) {
     const httpClient = inject(HttpClient);
 
     return (month: string): Observable<Todo[]> => {
-      return httpClient.get<Todo[]>(`${env.apiUrl}/todo/list/${month}`);
+      return httpClient
+        .get<Todo[]>(`${env.apiUrl}/todo/list/${month}`)
+        .pipe
+        // switchMap(() => {
+        //   throw Error('Not implemented');
+        // }),
+        ();
     };
   });
 }

@@ -21,7 +21,8 @@ import {
 } from '@angular/material/datepicker';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CreateTodoApi } from '../api/create-todo-list';
-import { QueryKeys } from '../app.config';
+
+import { QueryKeys } from '../query';
 
 @Component({
   standalone: true,
