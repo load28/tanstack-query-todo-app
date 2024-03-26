@@ -90,6 +90,11 @@ export class TodoPageComponent implements OnInit {
   ngOnInit() {}
 
   async onClick(month: string) {
-    await this.router.navigateByUrl(`/todos/list?m=${month}`);
+    const isWidgetView = this.router.url.includes('widget');
+    if (isWidgetView) {
+      await this.router.navigateByUrl(`/todos/widget?m=${month}`);
+    } else {
+      await this.router.navigateByUrl(`/todos/list?m=${month}`);
+    }
   }
 }
