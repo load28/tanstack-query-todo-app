@@ -24,7 +24,7 @@ const provideQuery = (
 ) => {
   return makeEnvironmentProviders([
     provideAngularQuery(qc),
-    ...Object.values(sd),
+    // ...Object.values(sd),
     {
       provide: ENVIRONMENT_INITIALIZER,
       multi: true,
@@ -43,7 +43,7 @@ const provideQuery = (
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      gcTime: 1000 * 3,
+      gcTime: 1000 * 4,
       staleTime: Infinity,
     },
   },
