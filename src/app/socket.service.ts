@@ -8,6 +8,12 @@ export class SocketService {
     transports: ['websocket'],
   });
 
+  getReconnectEvent() {
+    return new Observable((observer) => {
+      this.socket.on('reconnect', () => observer.next());
+    });
+  }
+
   joinTodoListRoom(month: string): void {
     this.socket.emit('join:todo-list', month);
   }

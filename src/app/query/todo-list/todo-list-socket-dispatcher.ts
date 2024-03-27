@@ -28,7 +28,15 @@ export class TodoListSocketDispatcher
       case 'added': {
         const [_, queryMonth] = qn.query.queryKey;
         this.socketService.joinTodoListRoom(queryMonth);
-        this.subs = this.subscribeSocketEvents(key, qn);
+        const eventSubs = this.subscribeSocketEvents(key, qn);
+        const reconnectSub = this.socketService.getReconnectEvent().subscribe({
+          next: () => {
+            this.unsubscribeSocketEvents();
+            this.subs = this.subscribeSocketEvents(key, qn);
+          },
+        });
+
+        this.subs = [...eventSubs, reconnectSub];
         break;
       }
       case 'removed': {
