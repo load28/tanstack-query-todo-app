@@ -1,4 +1,4 @@
-import { Component, input, OnInit } from '@angular/core';
+import { Component, Input, input, OnInit } from '@angular/core';
 import { Todo } from '../api/get-todo-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconButton } from '@angular/material/button';
@@ -11,26 +11,28 @@ import { DeleteTodoApi } from '../api/delete-todo';
   standalone: true,
   selector: 'todo-item',
   template: `
-    <mat-card class="todo-card">
-      <mat-card-header class="mat-card-header">
-        <mat-card-title class="mat-card-title"
-          >{{ todo().title }}
-        </mat-card-title>
-        <mat-card-subtitle class="mat-card-subtitle"
-          >{{ todo().date | timezoneDate: 'shortDate' : timezone }}
-        </mat-card-subtitle>
-        <button
-          class="mat-delete-button"
-          mat-icon-button
-          (click)="onDelete(todo().id)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-card-header>
-      <mat-card-content>
-        <p>{{ todo().content }}</p>
-      </mat-card-content>
-    </mat-card>
+    @if (todo) {
+      <mat-card class="todo-card">
+        <mat-card-header class="mat-card-header">
+          <mat-card-title class="mat-card-title"
+            >{{ todo.title }}
+          </mat-card-title>
+          <mat-card-subtitle class="mat-card-subtitle"
+            >{{ todo.date | timezoneDate: 'shortDate' : timezone }}
+          </mat-card-subtitle>
+          <button
+            class="mat-delete-button"
+            mat-icon-button
+            (click)="onDelete(todo.id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ todo.content }}</p>
+        </mat-card-content>
+      </mat-card>
+    }
   `,
   styles: `
     .todo-card {
@@ -64,7 +66,7 @@ import { DeleteTodoApi } from '../api/delete-todo';
 })
 export class TodoItemComponent implements OnInit {
   private readonly deleteTodoApi = DeleteTodoApi();
-  todo = input.required<Todo>();
+  @Input('todo') todo: Todo | undefined;
   timezone = 'Asia/Seoul';
 
   constructor() {}

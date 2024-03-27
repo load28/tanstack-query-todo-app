@@ -5,6 +5,7 @@ import { MatListItem, MatNavList } from '@angular/material/list';
 import { NgClass, NgForOf } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
+import { TodoWidgetEventService } from './todo-widget-event.service';
 
 @Component({
   standalone: true,
@@ -61,6 +62,7 @@ import { map } from 'rxjs';
   ],
 })
 export class TodoPageComponent implements OnInit {
+  private readonly todoWidgetEventService = inject(TodoWidgetEventService);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -92,7 +94,7 @@ export class TodoPageComponent implements OnInit {
   async onClick(month: string) {
     const isWidgetView = this.router.url.includes('widget');
     if (isWidgetView) {
-      await this.router.navigateByUrl(`/todos/widget?m=${month}`);
+      this.todoWidgetEventService.nextEvent(month);
     } else {
       await this.router.navigateByUrl(`/todos/list?m=${month}`);
     }

@@ -28,19 +28,19 @@ import { QueryKeys } from '../query';
   selector: 'panel-component',
   template: `
     <div class="container" cdkDrag cdkDragBoundary=".boundary">
-      @if (todoList.isLoading()) {
-        <div class="loading">Loading...</div>
-      } @else if (todoList.isError()) {
-        <div>Error: {{ todoList.error }}</div>
-      } @else {
-        <mat-card class="card">
-          <mat-card-header class="header">
-            <mat-card-title>{{ monthLabels() }}</mat-card-title>
-            <button mat-icon-button class="close-button" (click)="closePanel()">
-              <mat-icon>close</mat-icon>
-            </button>
-          </mat-card-header>
-          <mat-card-content class="card-content">
+      <mat-card class="card">
+        <mat-card-header class="header">
+          <mat-card-title>{{ monthLabels() }}</mat-card-title>
+          <button mat-icon-button class="close-button" (click)="closePanel()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content class="card-content">
+          @if (todoList.isLoading()) {
+            <div class="loading">Loading...</div>
+          } @else if (todoList.isError()) {
+            <p style="color: red">Error loading todos.</p>
+          } @else {
             @if (todoList.data()!.length === 0) {
               <div class="empty">No todos</div>
             } @else {
@@ -49,9 +49,9 @@ import { QueryKeys } from '../query';
                 [todo]="todo"
               ></todo-item>
             }
-          </mat-card-content>
-        </mat-card>
-      }
+          }
+        </mat-card-content>
+      </mat-card>
     </div>
   `,
   styles: [
@@ -67,6 +67,7 @@ import { QueryKeys } from '../query';
         display: flex;
         justify-content: center;
         align-items: center;
+        color: green;
       }
 
       .card {

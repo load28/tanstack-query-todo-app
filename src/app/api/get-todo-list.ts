@@ -1,7 +1,7 @@
 import { inject, Injector, runInInjectionContext } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { env } from '../../env/env';
-import { Observable } from 'rxjs';
+import { delay, Observable } from 'rxjs';
 
 export interface Todo {
   id: string;
@@ -16,13 +16,12 @@ export function GetTodoListApi(injector = inject(Injector)) {
     const httpClient = inject(HttpClient);
 
     return (month: string): Observable<Todo[]> => {
-      return httpClient
-        .get<Todo[]>(`${env.apiUrl}/todo/list/${month}`)
-        .pipe
+      return httpClient.get<Todo[]>(`${env.apiUrl}/todo/list/${month}`).pipe(
+        delay(3000),
         // switchMap(() => {
         //   throw Error('Not implemented');
         // }),
-        ();
+      );
     };
   });
 }

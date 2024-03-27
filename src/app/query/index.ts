@@ -49,7 +49,7 @@ export const provideQuery = (
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      gcTime: 1000 * 4,
+      gcTime: 1000 * 3,
       staleTime: Infinity,
     },
   },

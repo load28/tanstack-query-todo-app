@@ -67,8 +67,9 @@ import { QueryKeys } from '../query';
     </mat-expansion-panel>
 
     @if (todoList.isLoading()) {
+      <p style="color: green">Loading...</p>
     } @else if (todoList.isError()) {
-      <p>Error loading todos.</p>
+      <p style="color: red">Error loading todos.</p>
     } @else if (todoList.isSuccess()) {
       <todo-item *ngFor="let todo of todoList.data()" [todo]="todo"></todo-item>
     }

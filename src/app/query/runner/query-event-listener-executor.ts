@@ -11,10 +11,10 @@ export class QueryEventListenerExecutor {
   private readonly injector = inject(Injector);
   private readonly serviceInstances = new Map<string, TQueryEvenDispatcher>();
 
-  run(ql: Record<string, TQueryEventDispatcherClass>): () => void {
+  run(classes: Record<string, TQueryEventDispatcherClass>): () => void {
     return this.queryClient.getQueryCache().subscribe((qn) => {
       const domainKey = qn.query.queryKey[0];
-      const dispatcherClass = ql[domainKey];
+      const dispatcherClass = classes[domainKey];
 
       if (!dispatcherClass) {
         this.handleMissingDispatcher(domainKey);
@@ -39,6 +39,7 @@ export class QueryEventListenerExecutor {
   private handleMissingDispatcher(domainKey: string): void {
     console.warn('No query event dispatcher for', domainKey);
   }
+
   private getServiceInstance(
     qn: QueryCacheNotifyEvent,
     dispatcherClass: TQueryEventDispatcherClass,
