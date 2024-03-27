@@ -17,7 +17,7 @@ export function GetTodoListApi(injector = inject(Injector)) {
 
     return (month: string): Observable<Todo[]> => {
       return httpClient.get<Todo[]>(`${env.apiUrl}/todo/list/${month}`).pipe(
-        delay(3000),
+        delay(1000),
         // switchMap(() => {
         //   throw Error('Not implemented');
         // }),
