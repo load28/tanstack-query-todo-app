@@ -24,7 +24,7 @@
 3. localhost:4200/todo/list 또는 localhost:4200/todo/widget 접속
 
 
-### Tacnstack query class diagram
+### Tacnstack query event class diagram
 
 ```mermaid
 classDiagram
