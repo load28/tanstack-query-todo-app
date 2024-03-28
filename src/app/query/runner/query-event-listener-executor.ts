@@ -3,13 +3,13 @@ import {
   QueryCacheNotifyEvent,
 } from '@tanstack/angular-query-experimental';
 import { inject, Injectable, Injector } from '@angular/core';
-import { TQueryEvenDispatcher, TQueryEventDispatcherClass } from '../index';
+import { TQueryEvenHandler, TQueryEventDispatcherClass } from '../index';
 
 @Injectable({ providedIn: 'root' })
 export class QueryEventListenerExecutor {
   private readonly queryClient = injectQueryClient();
   private readonly injector = inject(Injector);
-  private readonly serviceInstances = new Map<string, TQueryEvenDispatcher>();
+  private readonly serviceInstances = new Map<string, TQueryEvenHandler>();
 
   run(classes: Record<string, TQueryEventDispatcherClass>): () => void {
     return this.queryClient.getQueryCache().subscribe((qn) => {
@@ -43,7 +43,7 @@ export class QueryEventListenerExecutor {
   private getServiceInstance(
     qn: QueryCacheNotifyEvent,
     dispatcherClass: TQueryEventDispatcherClass,
-  ): TQueryEvenDispatcher {
+  ): TQueryEvenHandler {
     return (
       this.serviceInstances.get(qn.query.queryHash) ||
       (() => {

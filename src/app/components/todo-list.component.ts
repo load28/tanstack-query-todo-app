@@ -28,7 +28,7 @@ import { QueryKeys } from '../query';
   standalone: true,
   selector: 'todo-list',
   template: `
-    <mat-expansion-panel>
+    <mat-expansion-panel [(expanded)]="openStatus">
       <mat-expansion-panel-header>
         <mat-panel-title> Add Todo</mat-panel-title>
       </mat-expansion-panel-header>
@@ -112,6 +112,8 @@ export class TodoListComponent {
   private readonly getTodoListApi = GetTodoListApi();
   private readonly createTodoApi = CreateTodoApi();
 
+  openStatus = false;
+
   months: Signal<string | undefined> = toSignal(
     this.activatedRoute.queryParams.pipe(
       map((params) => params['m'] as string),
@@ -166,5 +168,6 @@ export class TodoListComponent {
     }).subscribe();
 
     this.todoForm.reset();
+    this.openStatus = false;
   }
 }

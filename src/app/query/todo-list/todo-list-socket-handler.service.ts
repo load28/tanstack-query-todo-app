@@ -3,13 +3,13 @@ import { Todo } from '../../api/get-todo-list';
 import { SocketService } from '../../socket.service';
 import { filter, Subscription } from 'rxjs';
 import { QueryCacheNotifyEvent } from '@tanstack/angular-query-experimental';
-import { TQueryEvenDispatcher } from '../index';
-import { TodoListCacheDispatcher } from './todo-list-cache-dispatcher';
+import { TQueryEvenHandler } from '../index';
+import { TodoListCacheHandler } from './todo-list-cache-handler.service';
 
 @Injectable()
-export class TodoListSocketDispatcher
-  extends TodoListCacheDispatcher
-  implements TQueryEvenDispatcher
+export class TodoListSocketHandler
+  extends TodoListCacheHandler
+  implements TQueryEvenHandler
 {
   private readonly socketService = inject(SocketService);
 

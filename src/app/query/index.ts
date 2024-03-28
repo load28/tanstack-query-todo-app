@@ -19,13 +19,13 @@ export interface TQueryCacheHandler<K, T, S> {
   remove(key: K, id: string): S | undefined;
 }
 
-export interface TQueryEvenDispatcher {
+export interface TQueryEvenHandler {
   isEqual(qe: QueryCacheNotifyEvent): boolean;
 
   dispatch(qe: QueryCacheNotifyEvent): void;
 }
 
-export type TQueryEventDispatcherClass = new () => TQueryEvenDispatcher;
+export type TQueryEventDispatcherClass = new () => TQueryEvenHandler;
 export const provideQuery = (
   qc: QueryClient,
   sd: Record<string, TQueryEventDispatcherClass>,

@@ -4,7 +4,7 @@ import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { TodoListSocketDispatcher } from './query/todo-list/todo-list-socket-dispatcher';
+import { TodoListSocketHandler } from './query/todo-list/todo-list-socket-handler.service';
 import { provideQuery, queryClient, QueryKeys } from './query';
 
 export const appConfig: ApplicationConfig = {
@@ -14,7 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideNativeDateAdapter(),
     provideQuery(queryClient, {
-      [QueryKeys.todoList]: TodoListSocketDispatcher,
+      [QueryKeys.todoList]: TodoListSocketHandler,
     }),
   ],
 };

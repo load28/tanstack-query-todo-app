@@ -4,7 +4,7 @@ import { TQueryCacheHandler } from '../index';
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class TodoListCacheDispatcher
+export class TodoListCacheHandler
   implements TQueryCacheHandler<string[], Todo, Todo[]>
 {
   private readonly queryClient = injectQueryClient();
