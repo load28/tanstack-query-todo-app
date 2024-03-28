@@ -51,6 +51,9 @@ export const queryClient = new QueryClient({
     queries: {
       gcTime: 1000 * 3,
       staleTime: Infinity,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
     },
   },
 });
