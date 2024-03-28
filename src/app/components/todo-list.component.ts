@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, Signal } from '@angular/core';
+import { Component, inject, signal, Signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { lastValueFrom, map } from 'rxjs';
@@ -11,7 +11,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TodoItemComponent } from './todo-item.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import {
@@ -23,6 +23,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { CreateTodoApi } from '../api/create-todo-list';
 
 import { QueryKeys } from '../query';
+import { TodoFormComponent } from './todo-form.component';
 
 @Component({
   standalone: true,
@@ -33,37 +34,13 @@ import { QueryKeys } from '../query';
         <mat-panel-title> Add Todo</mat-panel-title>
       </mat-expansion-panel-header>
 
-      <form [formGroup]="todoForm" (ngSubmit)="addTodo()">
-        <mat-form-field class="todo-input">
-          <mat-label>Title</mat-label>
-          <input matInput formControlName="title" />
-        </mat-form-field>
-
-        <mat-form-field class="todo-input">
-          <mat-label>Details</mat-label>
-          <textarea matInput formControlName="details"></textarea>
-        </mat-form-field>
-
-        <mat-form-field class="todo-input">
-          <mat-label>Due Date</mat-label>
-          <input
-            matInput
-            [matDatepicker]="picker"
-            formControlName="date"
-            [matDatepickerFilter]="dateFilter()"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker
-            #picker
-            [startAt]="calendarStartAt()"
-          ></mat-datepicker>
-        </mat-form-field>
-
-        <button mat-raised-button color="primary" type="submit">Add</button>
-      </form>
+      <todo-form
+        [label]="'Add'"
+        [todo]="todoForm()"
+        [months]="months()"
+        (submitEvent)="addTodo($event)"
+        (cancelEvent)="onCancel()"
+      ></todo-form>
     </mat-expansion-panel>
 
     @if (todoList.isLoading()) {
@@ -81,15 +58,6 @@ import { QueryKeys } from '../query';
         flex-direction: column;
         gap: 42px;
       }
-
-      .todo-input {
-        width: 100%;
-        margin-bottom: 20px;
-      }
-
-      .todo-input textarea {
-        height: 140px;
-      }
     `,
   ],
   imports: [
@@ -105,6 +73,7 @@ import { QueryKeys } from '../query';
     MatDatepickerInput,
     MatDatepicker,
     MatExpansionModule,
+    TodoFormComponent,
   ],
 })
 export class TodoListComponent {
@@ -129,45 +98,30 @@ export class TodoListComponent {
     },
   }));
 
-  todoForm = new FormGroup({
-    title: new FormControl(''),
-    details: new FormControl(''),
-    date: new FormControl(''),
-  });
+  todoForm = signal({ title: '', content: '', date: '' });
 
-  dateFilter = computed(() => {
-    return (date: Date | null): boolean => {
-      if (!this.months()) {
-        return false;
-      }
+  constructor() {}
 
-      return date ? date.getMonth().toString() === this.months()! : false;
-    };
-  });
-
-  calendarStartAt = computed(() => {
-    return new Date(new Date().getFullYear(), parseInt(this.months()!));
-  });
-
-  constructor() {
-    effect(() => {
-      if (this.months()) {
-        this.todoForm.reset();
-      }
-    });
-  }
-
-  addTodo() {
-    const newTodo = this.todoForm.value;
-
+  addTodo({
+    title,
+    date,
+    content,
+  }: {
+    title: string;
+    content: string;
+    date: string;
+  }) {
     this.createTodoApi({
-      title: newTodo.title!,
-      content: newTodo.details!,
-      date: newTodo.date!,
+      title,
+      date,
+      content,
       month: this.months()!,
     }).subscribe();
 
-    this.todoForm.reset();
+    this.openStatus = false;
+  }
+
+  onCancel() {
     this.openStatus = false;
   }
 }

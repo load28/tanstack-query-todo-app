@@ -1,4 +1,4 @@
-import { Component, Input, input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { Todo } from '../api/get-todo-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconButton } from '@angular/material/button';
@@ -6,6 +6,7 @@ import { MatIcon } from '@angular/material/icon';
 import { DatePipe } from '@angular/common';
 import { TimezoneDatePipe } from '../utils/timezone-date.pipe';
 import { DeleteTodoApi } from '../api/delete-todo';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -20,13 +21,18 @@ import { DeleteTodoApi } from '../api/delete-todo';
           <mat-card-subtitle class="mat-card-subtitle"
             >{{ todo.date | timezoneDate: 'shortDate' : timezone }}
           </mat-card-subtitle>
-          <button
-            class="mat-delete-button"
-            mat-icon-button
-            (click)="onDelete(todo.id)"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
+          <div class="btn-group">
+            <button mat-icon-button (click)="moveTodoInfo(todo.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              class="mat-delete-button"
+              mat-icon-button
+              (click)="onDelete(todo.id)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </mat-card-header>
         <mat-card-content>
           <p>{{ todo.content }}</p>
@@ -61,19 +67,29 @@ import { DeleteTodoApi } from '../api/delete-todo';
     .mat-delete-button {
       color: #ab9e9e;
     }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      marin-left: auto;
+    }
   `,
   imports: [MatCardModule, MatIconButton, MatIcon, DatePipe, TimezoneDatePipe],
 })
 export class TodoItemComponent implements OnInit {
+  private readonly router = inject(Router);
   private readonly deleteTodoApi = DeleteTodoApi();
+
   @Input('todo') todo: Todo | undefined;
+
   timezone = 'Asia/Seoul';
-
-  constructor() {}
-
   ngOnInit() {}
 
   onDelete(id: string) {
     this.deleteTodoApi(id).subscribe();
+  }
+
+  async moveTodoInfo(id: string) {
+    await this.router.navigateByUrl(`/todo/${id}`);
   }
 }

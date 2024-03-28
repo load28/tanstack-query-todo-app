@@ -5,6 +5,7 @@ import { UserSettingsPageComponent } from './components/user-settings-page.compo
 import { TodoAddComponent } from './components/todo-add.component';
 import { TodoListComponent } from './components/todo-list.component';
 import { TodoWidgetViewComponent } from './components/todo-widget-view.component';
+import { TodoInfoComponent } from './components/todo-info.component';
 
 export const routes: Routes = [
   {
@@ -33,6 +34,10 @@ export const routes: Routes = [
         component: TodoWidgetViewComponent,
       },
     ],
+  },
+  {
+    path: 'todo/:id',
+    component: TodoInfoComponent,
   },
   {
     path: 'users/:id',

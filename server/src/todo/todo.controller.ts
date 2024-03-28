@@ -32,9 +32,9 @@ export class TodoController {
   async update(@Body() todo: Todo): Promise<Todo> {
     const updatedTodo = await this.todoService.update(todo);
     this.appGateway.server.to(todo.month).emit('todoUpdated', updatedTodo);
-    this.appGateway.server
-      .to(`todo-${todo.id}`)
-      .emit('todoUpdated', updatedTodo);
+    // this.appGateway.server
+    //   .to(`todo-${todo.id}`)
+    //   .emit('todoUpdated', updatedTodo);
     return updatedTodo;
   }
 

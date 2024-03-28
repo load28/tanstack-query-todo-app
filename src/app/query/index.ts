@@ -57,4 +57,5 @@ export const queryClient = new QueryClient({
 
 export const QueryKeys = {
   todoList: 'todoList',
+  todoInfo: 'todoInfo',
 } as const;

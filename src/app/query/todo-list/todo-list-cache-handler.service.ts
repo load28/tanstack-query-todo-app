@@ -3,7 +3,7 @@ import { injectQueryClient } from '@tanstack/angular-query-experimental';
 import { TQueryCacheHandler } from '../index';
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TodoListCacheHandler
   implements TQueryCacheHandler<string[], Todo, Todo[]>
 {

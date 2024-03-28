@@ -7,11 +7,9 @@ import { TQueryEvenHandler } from '../index';
 import { TodoListCacheHandler } from './todo-list-cache-handler.service';
 
 @Injectable()
-export class TodoListSocketHandler
-  extends TodoListCacheHandler
-  implements TQueryEvenHandler
-{
+export class TodoListSocketHandler implements TQueryEvenHandler {
   private readonly socketService = inject(SocketService);
+  private readonly todoListCacheHandler = inject(TodoListCacheHandler);
 
   subs: Subscription[] | undefined;
 
@@ -60,7 +58,7 @@ export class TodoListSocketHandler
         }),
       )
       .subscribe((data: Todo) => {
-        this.add(key, data);
+        this.todoListCacheHandler.add(key, data);
       });
     const removeSub = this.socketService
       .onTodoRemoved()
@@ -70,7 +68,7 @@ export class TodoListSocketHandler
         }),
       )
       .subscribe(({ id, month }) => {
-        this.remove(key, id);
+        this.todoListCacheHandler.remove(key, id);
       });
     const updateSub = this.socketService
       .onTodoUpdated()
@@ -80,7 +78,7 @@ export class TodoListSocketHandler
         }),
       )
       .subscribe((data: Todo) => {
-        this.update(key, data);
+        this.todoListCacheHandler.update(key, data);
       });
 
     return [addSub, removeSub, updateSub];

@@ -17,7 +17,6 @@ export class QueryEventListenerExecutor {
       const dispatcherClass = classes[domainKey];
 
       if (!dispatcherClass) {
-        this.handleMissingDispatcher(domainKey);
         return;
       }
 
@@ -33,11 +32,6 @@ export class QueryEventListenerExecutor {
         this.serviceInstances.delete(qn.query.queryHash);
       }
     });
-  }
-
-  // Handle missing dispatcher
-  private handleMissingDispatcher(domainKey: string): void {
-    console.warn('No query event dispatcher for', domainKey);
   }
 
   private getServiceInstance(
