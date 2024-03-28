@@ -94,6 +94,7 @@ export class TodoListComponent {
     queryKey: [QueryKeys.todoList, this.months()],
     queryFn: () => lastValueFrom(this.getTodoListApi(this.months()!)),
     enabled: !!this.months(),
+    retry: 1,
     meta: {
       month: this.months(),
     },
