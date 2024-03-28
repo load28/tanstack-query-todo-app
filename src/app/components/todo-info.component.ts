@@ -1,6 +1,5 @@
 import { Component, inject, Input, Signal } from '@angular/core';
 import { MatCard, MatCardModule } from '@angular/material/card';
-import { Todo } from '../api/get-todo-list';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { TodoUpdateModalComponent } from './todo-update-modal.component';
@@ -15,8 +14,9 @@ import { UpdateTodoApi } from '../api/update-todo-api';
 import { TodoInfoCacheHandler } from '../query/todo-info/todo-info-cache-handler.service';
 import { QueryKeys } from '../query';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { GetTodoInfoApi } from '../api/get-todo-info-api';
+import { Todo } from '../api/todo-api.model';
 
 @Component({
   standalone: true,
@@ -29,7 +29,7 @@ import { GetTodoInfoApi } from '../api/get-todo-info-api';
     } @else if (todoInfo.isSuccess()) {
       <mat-card class="card">
         @if (updateTodoMutation.isPending()) {
-          <div style="color: green; margin: auto">Updating...</div>
+          <div style="color: green; margin: auto;">Updating...</div>
         } @else if (updateTodoMutation.isError()) {
           <div>Failed to update todo</div>
         } @else if (
@@ -40,6 +40,7 @@ import { GetTodoInfoApi } from '../api/get-todo-info-api';
             <mat-card-subtitle>{{ todoInfo.data()!.date }}</mat-card-subtitle>
             <button
               mat-icon-button
+              style="margin-left: auto;"
               (click)="openUpdateDialog(todoInfo.data()!)"
             >
               <mat-icon>edit</mat-icon>
@@ -62,13 +63,12 @@ import { GetTodoInfoApi } from '../api/get-todo-info-api';
       }
 
       .card {
-        min-height: 300px;
         min-width: 300px;
+        height: 600px;
       }
 
       .content {
         padding-top: 20px;
-        height: 300px;
       }
     `,
   ],

@@ -6,7 +6,7 @@ import {
   CreateQueryResult,
   injectQuery,
 } from '@tanstack/angular-query-experimental';
-import { GetTodoListApi, Todo } from '../api/get-todo-list';
+import { GetTodoListApi } from '../api/get-todo-list-api';
 import { NgForOf, NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TodoItemComponent } from './todo-item.component';
@@ -20,10 +20,11 @@ import {
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { CreateTodoApi } from '../api/create-todo-list';
+import { CreateTodoApi } from '../api/create-todo-list-api';
 
 import { QueryKeys } from '../query';
 import { TodoFormComponent } from './todo-form.component';
+import { Todo } from '../api/todo-api.model';
 
 @Component({
   standalone: true,

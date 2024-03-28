@@ -2,7 +2,8 @@ import { inject, Injector, runInInjectionContext } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { env } from '../../env/env';
-import { Todo } from './get-todo-list';
+
+import { Todo } from './todo-api.model';
 
 export function CreateTodoApi(injector = inject(Injector)) {
   return runInInjectionContext(injector, () => {

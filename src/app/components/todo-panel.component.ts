@@ -15,13 +15,14 @@ import { NgForOf } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
-import { GetTodoListApi, Todo } from '../api/get-todo-list';
+import { GetTodoListApi } from '../api/get-todo-list-api';
 import {
   CreateQueryResult,
   injectQuery,
 } from '@tanstack/angular-query-experimental';
 import { lastValueFrom } from 'rxjs';
 import { QueryKeys } from '../query';
+import { Todo } from '../api/todo-api.model';
 
 @Component({
   standalone: true,

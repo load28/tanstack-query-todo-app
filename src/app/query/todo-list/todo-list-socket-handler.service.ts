@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import { Todo } from '../../api/get-todo-list';
 import { SocketService } from '../../socket.service';
 import { filter, Subscription } from 'rxjs';
 import { QueryCacheNotifyEvent } from '@tanstack/angular-query-experimental';
 import { TQueryEvenHandler } from '../index';
 import { TodoListCacheHandler } from './todo-list-cache-handler.service';
+import { Todo } from '../../api/todo-api.model';
 
 @Injectable()
 export class TodoListSocketHandler implements TQueryEvenHandler {

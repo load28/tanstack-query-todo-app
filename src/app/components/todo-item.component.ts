@@ -1,12 +1,12 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { Todo } from '../api/get-todo-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { DatePipe } from '@angular/common';
 import { TimezoneDatePipe } from '../utils/timezone-date.pipe';
-import { DeleteTodoApi } from '../api/delete-todo';
+import { DeleteTodoApi } from '../api/delete-todo-api';
 import { Router } from '@angular/router';
+import { Todo } from '../api/todo-api.model';
 
 @Component({
   standalone: true,
@@ -71,7 +71,7 @@ import { Router } from '@angular/router';
     .btn-group {
       display: flex;
       gap: 10px;
-      marin-left: auto;
+      margin-left: auto;
     }
   `,
   imports: [MatCardModule, MatIconButton, MatIcon, DatePipe, TimezoneDatePipe],
