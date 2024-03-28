@@ -23,18 +23,37 @@ export class TodoListSocketHandler implements TQueryEvenHandler {
     const type = qn.type;
     const key = qn.query.queryKey;
     switch (type) {
-      case 'added': {
-        const [_, queryMonth] = qn.query.queryKey;
-        this.socketService.joinTodoListRoom(queryMonth);
-        const eventSubs = this.subscribeSocketEvents(key, qn);
-        const reconnectSub = this.socketService.getReconnectEvent().subscribe({
-          next: () => {
-            this.unsubscribeSocketEvents();
-            this.subs = this.subscribeSocketEvents(key, qn);
-          },
-        });
+      case 'observerAdded': {
+        const fetchStatus = `${qn.query.state.fetchStatus}`;
+        if (fetchStatus === 'idle' && !this.subs) {
+          const [_, queryMonth] = qn.query.queryKey;
+          this.socketService.joinTodoListRoom(queryMonth);
+          const eventSubs = this.subscribeSocketEvents(key, qn);
+          const reconnectSub = this.socketService
+            .getReconnectEvent()
+            .subscribe({
+              next: () => {
+                this.unsubscribeSocketEvents();
+                this.subs = this.subscribeSocketEvents(key, qn);
+              },
+            });
 
-        this.subs = [...eventSubs, reconnectSub];
+          this.subs = [...eventSubs, reconnectSub];
+        }
+        break;
+      }
+      case 'added': {
+        // const [_, queryMonth] = qn.query.queryKey;
+        // this.socketService.joinTodoListRoom(queryMonth);
+        // const eventSubs = this.subscribeSocketEvents(key, qn);
+        // const reconnectSub = this.socketService.getReconnectEvent().subscribe({
+        //   next: () => {
+        //     this.unsubscribeSocketEvents();
+        //     this.subs = this.subscribeSocketEvents(key, qn);
+        //   },
+        // });
+        //
+        // this.subs = [...eventSubs, reconnectSub];
         break;
       }
       case 'removed': {
