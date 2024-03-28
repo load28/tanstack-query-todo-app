@@ -21,7 +21,7 @@ export class TodoListSocketHandler
     return queryMonth === targetMonth;
   }
 
-  dispatch(qn: QueryCacheNotifyEvent) {
+  handleQueryEvent(qn: QueryCacheNotifyEvent) {
     const type = qn.type;
     const key = qn.query.queryKey;
     switch (type) {

@@ -27,7 +27,7 @@ export class QueryEventListenerExecutor {
         return;
       }
 
-      serviceInstances.dispatch(qn);
+      serviceInstances.handleQueryEvent(qn);
 
       if (qn.type === 'removed') {
         this.serviceInstances.delete(qn.query.queryHash);

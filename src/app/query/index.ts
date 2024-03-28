@@ -22,7 +22,7 @@ export interface TQueryCacheHandler<K, T, S> {
 export interface TQueryEvenHandler {
   isEqual(qe: QueryCacheNotifyEvent): boolean;
 
-  dispatch(qe: QueryCacheNotifyEvent): void;
+  handleQueryEvent(qe: QueryCacheNotifyEvent): void;
 }
 
 export type TQueryEventDispatcherClass = new () => TQueryEvenHandler;
