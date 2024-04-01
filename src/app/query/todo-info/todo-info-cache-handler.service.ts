@@ -14,9 +14,11 @@ export class TodoInfoCacheHandler implements TQueryCacheHandler<string[], Todo, 
   }
 
   remove(key: string[], id: string): Todo | undefined {
-    return this.queryClient.setQueryData(key, (state: Todo | undefined) => {
-      return undefined;
-    });
+     this.queryClient.removeQueries({exact: true, queryKey: key, type: 'all'});
+     return undefined;
+    // return this.queryClient.setQueryData(key, (state: Todo | undefined) => {
+    //   return undefined;
+    // });
   }
 
   update(key: string[], data: Todo): Todo | undefined {
