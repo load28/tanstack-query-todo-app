@@ -1,30 +1,23 @@
-import { Component, inject, signal, Signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { lastValueFrom, map } from 'rxjs';
-import {
-  CreateQueryResult,
-  injectQuery,
-} from '@tanstack/angular-query-experimental';
-import { GetTodoListApi } from '../api/get-todo-list-api';
 import { NgForOf, NgIf } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { TodoItemComponent } from './todo-item.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { Component, inject, signal, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
-import {
-  MatDatepicker,
-  MatDatepickerInput,
-  MatDatepickerToggle,
-} from '@angular/material/datepicker';
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ActivatedRoute } from '@angular/router';
+import { CreateQueryResult, injectQuery } from '@tanstack/angular-query-experimental';
+import { lastValueFrom, map } from 'rxjs';
 import { CreateTodoApi } from '../api/create-todo-list-api';
+import { GetTodoListApi } from '../api/get-todo-list-api';
+import { TodoItemComponent } from './todo-item.component';
 
+import { Todo } from '../api/todo-api.model';
 import { QueryKeys } from '../query';
 import { TodoFormComponent } from './todo-form.component';
-import { Todo } from '../api/todo-api.model';
 
 @Component({
   standalone: true,
@@ -85,9 +78,7 @@ export class TodoListComponent {
   openStatus = false;
 
   months: Signal<string | undefined> = toSignal(
-    this.activatedRoute.queryParams.pipe(
-      map((params) => params['m'] as string),
-    ),
+    this.activatedRoute.queryParams.pipe(map((params) => params['m'] as string)),
   );
 
   todoList: CreateQueryResult<Todo[]> = injectQuery(() => ({
@@ -104,15 +95,7 @@ export class TodoListComponent {
 
   constructor() {}
 
-  addTodo({
-    title,
-    date,
-    content,
-  }: {
-    title: string;
-    content: string;
-    date: string;
-  }) {
+  addTodo({ title, date, content }: { title: string; content: string; date: string }) {
     this.createTodoApi({
       title,
       date,

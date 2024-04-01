@@ -43,10 +43,8 @@ export class TodoWidgetViewComponent {
   private addPanel(month: string) {
     const compRef = this.container!.createComponent(PanelComponent);
     compRef.instance.months.set(month);
-    compRef.instance.close
-      .pipe(takeUntilDestroyed(compRef.instance.destroyRef))
-      .subscribe(() => {
-        compRef.destroy();
-      });
+    compRef.instance.close.pipe(takeUntilDestroyed(compRef.instance.destroyRef)).subscribe(() => {
+      compRef.destroy();
+    });
   }
 }

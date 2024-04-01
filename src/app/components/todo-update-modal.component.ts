@@ -1,11 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { TodoFormComponent } from './todo-form.component';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogContent,
-  MatDialogRef,
-} from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
+import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
+import { TodoFormComponent } from './todo-form.component';
 
 @Component({
   standalone: true,

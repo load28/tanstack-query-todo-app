@@ -1,7 +1,7 @@
-import { inject, Injector, runInInjectionContext } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { env } from '../../env/env';
+import { inject, Injector, runInInjectionContext } from '@angular/core';
 import { delay, Observable } from 'rxjs';
+import { env } from '../../env/env';
 import { Todo } from './todo-api.model';
 
 export function GetTodoListApi(injector = inject(Injector)) {

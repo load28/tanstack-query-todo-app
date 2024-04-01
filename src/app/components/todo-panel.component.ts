@@ -1,3 +1,5 @@
+import { CdkDrag } from '@angular/cdk/drag-drop';
+import { NgForOf } from '@angular/common';
 import {
   Component,
   computed,
@@ -9,20 +11,15 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { CdkDrag } from '@angular/cdk/drag-drop';
-import { TodoItemComponent } from './todo-item.component';
-import { NgForOf } from '@angular/common';
+import { MatIconButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
-import { MatIconButton } from '@angular/material/button';
-import { GetTodoListApi } from '../api/get-todo-list-api';
-import {
-  CreateQueryResult,
-  injectQuery,
-} from '@tanstack/angular-query-experimental';
+import { CreateQueryResult, injectQuery } from '@tanstack/angular-query-experimental';
 import { lastValueFrom } from 'rxjs';
-import { QueryKeys } from '../query';
+import { GetTodoListApi } from '../api/get-todo-list-api';
 import { Todo } from '../api/todo-api.model';
+import { QueryKeys } from '../query';
+import { TodoItemComponent } from './todo-item.component';
 
 @Component({
   standalone: true,
@@ -45,10 +42,7 @@ import { Todo } from '../api/todo-api.model';
             @if (todoList.data()!.length === 0) {
               <div class="empty">No todos</div>
             } @else {
-              <todo-item
-                *ngFor="let todo of todoList.data()"
-                [todo]="todo"
-              ></todo-item>
+              <todo-item *ngFor="let todo of todoList.data()" [todo]="todo"></todo-item>
             }
           }
         </mat-card-content>
@@ -104,14 +98,7 @@ import { Todo } from '../api/todo-api.model';
       }
     `,
   ],
-  imports: [
-    CdkDrag,
-    TodoItemComponent,
-    NgForOf,
-    MatCardModule,
-    MatIcon,
-    MatIconButton,
-  ],
+  imports: [CdkDrag, TodoItemComponent, NgForOf, MatCardModule, MatIcon, MatIconButton],
 })
 export class PanelComponent implements OnInit {
   readonly destroyRef = inject(DestroyRef);
@@ -119,8 +106,7 @@ export class PanelComponent implements OnInit {
 
   months: WritableSignal<string | undefined> = signal(undefined);
   monthLabels = computed(() => {
-    return this.monthsConstant.find((month) => month.value === this.months())
-      ?.name;
+    return this.monthsConstant.find((month) => month.value === this.months())?.name;
   });
 
   monthsConstant: { name: string; value: string }[] = [

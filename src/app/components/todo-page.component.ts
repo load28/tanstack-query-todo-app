@@ -1,9 +1,9 @@
-import { Component, inject, OnInit, Signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListItem, MatNavList } from '@angular/material/list';
 import { NgClass, NgForOf } from '@angular/common';
+import { Component, inject, OnInit, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MatListItem, MatNavList } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs';
 import { TodoWidgetEventService } from './todo-widget-event.service';
 
@@ -52,14 +52,7 @@ import { TodoWidgetEventService } from './todo-widget-event.service';
       }
     `,
   ],
-  imports: [
-    RouterOutlet,
-    MatNavList,
-    MatListItem,
-    NgForOf,
-    MatSidenavModule,
-    NgClass,
-  ],
+  imports: [RouterOutlet, MatNavList, MatListItem, NgForOf, MatSidenavModule, NgClass],
 })
 export class TodoPageComponent implements OnInit {
   private readonly todoWidgetEventService = inject(TodoWidgetEventService);
@@ -82,9 +75,7 @@ export class TodoPageComponent implements OnInit {
   ];
 
   selectedMonth: Signal<string | undefined> = toSignal(
-    this.activatedRoute.queryParams.pipe(
-      map((params) => params['m'] as string),
-    ),
+    this.activatedRoute.queryParams.pipe(map((params) => params['m'] as string)),
   );
 
   constructor() {}

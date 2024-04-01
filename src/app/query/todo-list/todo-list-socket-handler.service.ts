@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import { SocketService } from '../../socket.service';
-import { filter, Subscription } from 'rxjs';
 import { QueryCacheNotifyEvent } from '@tanstack/angular-query-experimental';
+import { filter, Subscription } from 'rxjs';
+import { Todo } from '../../api/todo-api.model';
+import { SocketService } from '../../socket.service';
 import { TQueryEvenHandler } from '../index';
 import { TodoListCacheHandler } from './todo-list-cache-handler.service';
-import { Todo } from '../../api/todo-api.model';
 
 @Injectable()
 export class TodoListSocketHandler implements TQueryEvenHandler {
@@ -29,14 +29,12 @@ export class TodoListSocketHandler implements TQueryEvenHandler {
           const [_, queryMonth] = qn.query.queryKey;
           this.socketService.joinTodoListRoom(queryMonth);
           const eventSubs = this.subscribeSocketEvents(key, qn);
-          const reconnectSub = this.socketService
-            .getReconnectEvent()
-            .subscribe({
-              next: () => {
-                this.unsubscribeSocketEvents();
-                this.subs = this.subscribeSocketEvents(key, qn);
-              },
-            });
+          const reconnectSub = this.socketService.getReconnectEvent().subscribe({
+            next: () => {
+              this.unsubscribeSocketEvents();
+              this.subs = this.subscribeSocketEvents(key, qn);
+            },
+          });
 
           this.subs = [...eventSubs, reconnectSub];
         }
@@ -63,10 +61,7 @@ export class TodoListSocketHandler implements TQueryEvenHandler {
     }
   }
 
-  private subscribeSocketEvents(
-    key: string[],
-    qn: QueryCacheNotifyEvent,
-  ): Subscription[] {
+  private subscribeSocketEvents(key: string[], qn: QueryCacheNotifyEvent): Subscription[] {
     const { month: metaMonth } = qn.query.meta as { month: string };
 
     const addSub = this.socketService

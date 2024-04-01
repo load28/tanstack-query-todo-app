@@ -8,11 +8,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class TimezoneDatePipe implements PipeTransform {
   private readonly datePipe = new DatePipe('en-US');
 
-  transform(
-    value: string,
-    format: string = 'shortDate',
-    timezone: string = 'UTC',
-  ) {
+  transform(value: string, format: string = 'shortDate', timezone: string = 'UTC') {
     return this.datePipe.transform(value, format, timezone);
   }
 }

@@ -1,8 +1,5 @@
-import {
-  injectQueryClient,
-  QueryCacheNotifyEvent,
-} from '@tanstack/angular-query-experimental';
 import { inject, Injectable, Injector } from '@angular/core';
+import { injectQueryClient, QueryCacheNotifyEvent } from '@tanstack/angular-query-experimental';
 import { TQueryEvenHandler, TQueryEventDispatcherClass } from '../index';
 
 @Injectable({ providedIn: 'root' })

@@ -1,28 +1,8 @@
-import {
-  Component,
-  computed,
-  effect,
-  input,
-  Input,
-  output,
-} from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { Component, computed, effect, input, output } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import {
-  MatDatepicker,
-  MatDatepickerInput,
-  MatDatepickerToggle,
-} from '@angular/material/datepicker';
-import {
-  MatFormField,
-  MatLabel,
-  MatSuffix,
-} from '@angular/material/form-field';
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 
 @Component({
@@ -42,25 +22,13 @@ import { MatInput } from '@angular/material/input';
 
       <mat-form-field class="todo-input">
         <mat-label>Due Date</mat-label>
-        <input
-          matInput
-          [matDatepicker]="picker"
-          formControlName="date"
-          [matDatepickerFilter]="dateFilter()"
-        />
+        <input matInput [matDatepicker]="picker" formControlName="date" [matDatepickerFilter]="dateFilter()" />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker [startAt]="calendarStartAt()"></mat-datepicker>
       </mat-form-field>
 
       <div class="btn-group">
-        <button
-          mat-raised-button
-          color="secondary"
-          type="button"
-          (click)="onCancel()"
-        >
-          Cancel
-        </button>
+        <button mat-raised-button color="secondary" type="button" (click)="onCancel()">Cancel</button>
         <button mat-raised-button color="primary" type="submit">
           {{ label() }}
         </button>

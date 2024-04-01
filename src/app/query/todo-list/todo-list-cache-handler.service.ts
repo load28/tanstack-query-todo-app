@@ -1,12 +1,10 @@
-import { injectQueryClient } from '@tanstack/angular-query-experimental';
-import { TQueryCacheHandler } from '../index';
 import { Injectable } from '@angular/core';
+import { injectQueryClient } from '@tanstack/angular-query-experimental';
 import { Todo } from '../../api/todo-api.model';
+import { TQueryCacheHandler } from '../index';
 
 @Injectable({ providedIn: 'root' })
-export class TodoListCacheHandler
-  implements TQueryCacheHandler<string[], Todo, Todo[]>
-{
+export class TodoListCacheHandler implements TQueryCacheHandler<string[], Todo, Todo[]> {
   private readonly queryClient = injectQueryClient();
 
   add(key: string[], data: Todo): Todo[] | undefined {
@@ -23,9 +21,7 @@ export class TodoListCacheHandler
 
   update(key: string[], data: Todo): Todo[] | undefined {
     return this.queryClient.setQueryData(key, (state: Todo[] | undefined) => {
-      return getSafeTodoList(state).map((todo) =>
-        todo.id === data.id ? data : todo,
-      );
+      return getSafeTodoList(state).map((todo) => (todo.id === data.id ? data : todo));
     });
   }
 }

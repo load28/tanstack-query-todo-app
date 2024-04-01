@@ -1,12 +1,12 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
 import { DatePipe } from '@angular/common';
-import { TimezoneDatePipe } from '../utils/timezone-date.pipe';
-import { DeleteTodoApi } from '../api/delete-todo-api';
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { MatIconButton } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { DeleteTodoApi } from '../api/delete-todo-api';
 import { Todo } from '../api/todo-api.model';
+import { TimezoneDatePipe } from '../utils/timezone-date.pipe';
 
 @Component({
   standalone: true,
@@ -15,9 +15,7 @@ import { Todo } from '../api/todo-api.model';
     @if (todo) {
       <mat-card class="todo-card">
         <mat-card-header class="mat-card-header">
-          <mat-card-title class="mat-card-title"
-            >{{ todo.title }}
-          </mat-card-title>
+          <mat-card-title class="mat-card-title">{{ todo.title }} </mat-card-title>
           <mat-card-subtitle class="mat-card-subtitle"
             >{{ todo.date | timezoneDate: 'shortDate' : timezone }}
           </mat-card-subtitle>
@@ -25,11 +23,7 @@ import { Todo } from '../api/todo-api.model';
             <button mat-icon-button (click)="moveTodoInfo(todo.id)">
               <mat-icon>edit</mat-icon>
             </button>
-            <button
-              class="mat-delete-button"
-              mat-icon-button
-              (click)="onDelete(todo.id)"
-            >
+            <button class="mat-delete-button" mat-icon-button (click)="onDelete(todo.id)">
               <mat-icon>delete</mat-icon>
             </button>
           </div>

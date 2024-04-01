@@ -1,14 +1,5 @@
-import {
-  provideAngularQuery,
-  QueryCacheNotifyEvent,
-  QueryClient,
-} from '@tanstack/angular-query-experimental';
-import {
-  DestroyRef,
-  ENVIRONMENT_INITIALIZER,
-  inject,
-  makeEnvironmentProviders,
-} from '@angular/core';
+import { DestroyRef, ENVIRONMENT_INITIALIZER, inject, makeEnvironmentProviders } from '@angular/core';
+import { provideAngularQuery, QueryCacheNotifyEvent, QueryClient } from '@tanstack/angular-query-experimental';
 import { QueryEventListenerExecutor } from './runner/query-event-listener-executor';
 
 export interface TQueryCacheHandler<K, T, S> {
@@ -26,10 +17,7 @@ export interface TQueryEvenHandler {
 }
 
 export type TQueryEventDispatcherClass = new () => TQueryEvenHandler;
-export const provideQuery = (
-  qc: QueryClient,
-  sd: Record<string, TQueryEventDispatcherClass>,
-) => {
+export const provideQuery = (qc: QueryClient, sd: Record<string, TQueryEventDispatcherClass>) => {
   return makeEnvironmentProviders([
     provideAngularQuery(qc),
     {
@@ -49,7 +37,7 @@ export const provideQuery = (
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      gcTime: 1000 * 3,
+      gcTime: 1000 * 2,
       staleTime: Infinity,
       refetchOnMount: false,
       refetchOnReconnect: false,
